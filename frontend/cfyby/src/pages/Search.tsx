@@ -1,9 +1,10 @@
 import Footer from "../components/Footer";
+import SearchSection from "../components/SearchSection"
 
 export default function Search() {
   return (
     <div>
-      <h1 color="Black">Search Page</h1>
+      <SearchSection/>
       <Footer />
     </div>
   );

@@ -2,6 +2,7 @@
 import uvicorn
 import json
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
 from services.process_music_data import process_music_data
 
@@ -14,6 +15,19 @@ app = FastAPI(
     title="Curated For You, By You API",
     description="Simple backend requests",
     version="1.0.0",
+)
+
+origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 @app.get("/artists/genre")
@@ -44,7 +58,8 @@ def get_artists_by_genre(genre: str, n: int):
         output_list.append(artists_of_genre[i])
         
 
-    return output_list
+    output_list = artists_of_genre[:n]
+    return {"results": output_list}
 
 @app.get("/artists/city")
 def get_artists_by_genre_city(genre: str, city: str, n: int):
@@ -83,7 +98,8 @@ def get_artists_by_genre_city(genre: str, city: str, n: int):
         output_list.append(artists_of_city[i])
         
 
-    return output_list
+    output_list = artists_of_city[:n]
+    return {"results": output_list}
 
 @app.get("/")
 def get_root():
