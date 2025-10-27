@@ -5,6 +5,7 @@ import { createTheme, ThemeProvider, CssBaseline } from "@mui/material";
 
 import Home from "./pages/Home";
 import Search from "./pages/Search";
+import Artist from "./pages/Artist";
 
 const theme = createTheme({
   typography: {
@@ -20,6 +21,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/search" element={<Search />} />
+          <Route path="/artist" element={<Artist />} />
         </Routes>
       </Router>
     </ThemeProvider>
