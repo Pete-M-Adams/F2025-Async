@@ -1,0 +1,241 @@
+openapi: 3.0.0
+info:
+  title: Curated For You, By You API
+  description: Simple backend requests
+  version: 1.0.0
+paths:
+  /:
+    get:
+      summary: Root
+      description: A simple root endpoint to check if the API is running.
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  capturedHello:
+                    type: string
+                    example: capturedWorld
+  /artists:
+    get:
+      summary: Get Artists by Location and Genre
+      description: Finds an artist based on a combination of genre, country, and city. All parameters are required.
+      parameters:
+        - name: genre
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The genre of the artist.
+        - name: country
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The country where the artist is from.
+        - name: city
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The city where the artist is from.
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  artist:
+                    type: string
+        "404":
+          description: Artist not found
+  /genre/{genre}:
+    get:
+      summary: Get information by Genre
+      description: Retrieves information for a given genre. Note - the current implementation of this endpoint in the source code appears to be broken as it relies on undefined variables.
+      parameters:
+        - name: genre
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The genre to look up.
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  artist:
+                    type: string
+        "404":
+          description: Artist not found
+  /artist-info/{name}:
+    get:
+      summary: Get Artist Information
+      description: Retrieves all available information for a specific artist.
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The name of the artist to look up.
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Artist"
+        "404":
+          description: Artist not found
+  /artist-description/{artist}:
+    get:
+      summary: Get Artist Description
+      description: Retrieves the summary/description for a specific artist.
+      parameters:
+        - name: artist
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The name of the artist.
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  summary:
+                    type: string
+                    example: A Description of Artist
+        "404":
+          description: Artist not found
+  /artist-image/{artist}:
+    get:
+      summary: Get Artist Image
+      description: Retrieves the image URL for a specific artist.
+      parameters:
+        - name: artist
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The name of the artist.
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  image:
+                    type: string
+                    example: https://example.com/bruce-springsteen.jpg
+        "404":
+          description: Artist not found
+  /artist-albums/{artist}:
+    get:
+      summary: Get Artist's Albums
+      description: Retrieves a list of albums for a specific artist.
+      parameters:
+        - name: artist
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The name of the artist.
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Album"
+        "404":
+          description: Artist not found
+  /album-info/{title}:
+    get:
+      summary: Get Album Information
+      description: Retrieves detailed information about a specific album.
+      parameters:
+        - name: title
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The title of the album to look up.
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Album"
+        "404":
+          description: Album not found
+components:
+  schemas:
+    Artist:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Bruce Springsteen
+        country:
+          type: string
+          example: United States
+        city:
+          type: string
+          example: Long Branch
+        summary:
+          type: string
+          example: A Description of Artist
+        image:
+          type: string
+          example: https://example.com/bruce-springsteen.jpg
+        albums:
+          type: array
+          items:
+            $ref: "#/components/schemas/Album"
+    Album:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Born to Run
+        year:
+          type: integer
+          example: 1975
+        image:
+          type: string
+          example: https://example.com/born-to-run.jpg
+        rating:
+          type: integer
+          example: 5
+        tracks:
+          type: array
+          items:
+            $ref: "#/components/schemas/Track"
+    Track:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Jungleland
+        duration:
+          type: integer
+          example: 240
