@@ -1,1 +1,1 @@
-# Currated For You By You
+# Curated For You, By You
