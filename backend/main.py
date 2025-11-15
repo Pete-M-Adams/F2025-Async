@@ -1,7 +1,5 @@
 # main.py
 import json
-from typing import Optional
-
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -21,6 +19,14 @@ origins = [
     "http://127.0.0.1:3000",
 ]
 
+""" #ip whitelist
+
+ALLOWED_IPS = [
+
+    "108.4.250.32" #pete's ip
+
+]
+ """
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -29,6 +35,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+""" @app.middleware("http")
+async def ip_whitelist_middleware(request: Request, call_next):
+    #get client ip
+    client_ip = request.client.host
+
+    #check if ip is in ALLOWED_IPS
+    if client_ip not in ALLOWED_IPS:
+        raise HTTPException(status_code=403, detail=f"IP {client_ip} has not been whitelisted")
+    
+    #if ip is whitelisted, the request will continue
+    return await call_next(request)
+    return response """
 
 @app.get("/artists/genre")
 def get_artists_by_genre(genre: str, n: int):
