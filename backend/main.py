@@ -1,5 +1,4 @@
 # main.py
-import uvicorn
 import json
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -134,22 +133,6 @@ Get a list of artists by location and genre
     list
         An array of artists
 """
-
-<<<<<<< HEAD
-### Onion Archeticture
-##
-# Front End (IN Public internet ) View (How the data is displayed on the screen)
-#   ^
-#   |
-# MiddleWare (Gives Data to Front End) Controller (Where the data goes)
-#   ^
-#   |
-# Backend (Stores Data) (DATA) Models | Brain is here with Pete
-#   ^
-# ###
-
-=======
->>>>>>> d0db3e4 (Added happy/sad path test for endpoints)
 
 @app.get("/artists")
 def get_artists(genre: str = None, country: str = None, city: str = None):

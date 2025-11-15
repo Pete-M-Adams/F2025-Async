@@ -1,7 +1,18 @@
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
 import { useState } from "react";
-import { Button, Stack, Box, List, ListItem, ListItemText, Typography, Divider, CircularProgress } from '@mui/material';
+import {
+  Button,
+  Stack,
+  Box,
+  List,
+  ListItemText,
+  Typography,
+  Divider,
+  CircularProgress,
+  ListItemButton,
+} from "@mui/material";
+import { Link } from "react-router-dom";
 
 type ArtistResult = {
   name?: string;
@@ -20,7 +31,11 @@ export default function LocationSearch() {
   ]);
 
   const [genreOptions] = useState([
-    "Rock", "Hip Hop", "Jazz", "Pop", "Country"
+    "Rock",
+    "Hip Hop",
+    "Jazz",
+    "Pop",
+    "Country",
   ]);
 
   // Lifted search values (merged from SearchSection.tsx)
@@ -30,7 +45,10 @@ export default function LocationSearch() {
   const [showResults, setShowResults] = useState(false);
   const [results, setResults] = useState<ArtistResult[]>([]);
 
-  const handleInputChange = (field: "genre" | "country" | "city", value: string) => {
+  const handleInputChange = (
+    field: "genre" | "country" | "city",
+    value: string,
+  ) => {
     setValues((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -48,7 +66,9 @@ export default function LocationSearch() {
       const data = await response.json();
 
       // Accept either array of strings or array of objects under `results`
-      const payload = Array.isArray(data) ? data : (data.results || data.artists || []);
+      const payload = Array.isArray(data)
+        ? data
+        : data.results || data.artists || [];
       setResults(payload);
       setShowResults(true);
     } catch (err) {
@@ -59,26 +79,25 @@ export default function LocationSearch() {
       setLoading(false);
     }
   };
-
-  const isDisabled = loading || (!values.genre);
+  const isDisabled = loading || !values.genre;
 
   return (
     <Stack
-      direction={{ xs: 'column', md: 'row' }}
+      direction={{ xs: "column", md: "row" }}
       alignItems="center"
       spacing={10}
-      sx={{ justifyContent: 'center', p: 4 }}
+      sx={{ justifyContent: "center", p: 4 }}
     >
       {/* Search Bar Box (layout kept from original) */}
       <Box
         sx={{
-          bgcolor: 'white',
+          bgcolor: "white",
           boxShadow: 4,
           borderRadius: 3,
           p: 4,
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
           gap: 2,
         }}
       >
@@ -87,10 +106,12 @@ export default function LocationSearch() {
           options={locationOptions}
           getOptionLabel={(option) => `${option.city}, ${option.country}`}
           sx={{ width: 250 }}
-          value={values.city ? { city: values.city, country: values.country } : null}
+          value={
+            values.city ? { city: values.city, country: values.country } : null
+          }
           onChange={(_, newValue) => {
-            if (newValue) handleInputChange('city', newValue.city || '');
-            if (newValue) handleInputChange('country', newValue.country || '');
+            if (newValue) handleInputChange("city", newValue.city || "");
+            if (newValue) handleInputChange("country", newValue.country || "");
           }}
           renderInput={(params) => <TextField {...params} label="Location" />}
         />
@@ -100,7 +121,7 @@ export default function LocationSearch() {
           options={genreOptions}
           sx={{ width: 250 }}
           value={values.genre || null}
-          onChange={(_, newValue) => handleInputChange('genre', newValue || '')}
+          onChange={(_, newValue) => handleInputChange("genre", newValue || "")}
           renderInput={(params) => <TextField {...params} label="Genre" />}
         />
 
@@ -109,9 +130,11 @@ export default function LocationSearch() {
           size="large"
           onClick={handleSearch}
           disabled={isDisabled}
-          endIcon={loading ? <CircularProgress size={18} color="inherit" /> : null}
+          endIcon={
+            loading ? <CircularProgress size={18} color="inherit" /> : null
+          }
         >
-          {loading ? 'Searching...' : 'Search'}
+          {loading ? "Searching..." : "Search"}
         </Button>
       </Box>
 
@@ -122,9 +145,9 @@ export default function LocationSearch() {
             width: 400,
             height: 600,
             borderRadius: 3,
-            bgcolor: 'white',
+            bgcolor: "white",
             boxShadow: 4,
-            overflowY: 'auto',
+            overflowY: "auto",
             p: 2,
           }}
         >
@@ -135,18 +158,36 @@ export default function LocationSearch() {
           <List>
             {results.length > 0 ? (
               results.map((item, index) => (
-                <ListItem
+                <ListItemButton
                   key={index}
                   divider
+                  component={Link}
+                  to="/artist"
                   sx={{
-                    '&:hover': { bgcolor: 'grey.100', cursor: 'pointer' },
+                    "&:hover": { bgcolor: "grey.100", cursor: "pointer" },
                   }}
                 >
                   <ListItemText
-                    primary={<Typography variant="subtitle1">{typeof item === 'string' ? item : (item.name || item.title || item.artistName || JSON.stringify(item))}</Typography>}
-                    secondary={<Typography variant="body2" color="text.secondary">{(item as ArtistResult).genre || (item as ArtistResult).city ? `${(item as ArtistResult).genre || ''}${(item as ArtistResult).genre && (item as ArtistResult).city ? ' • ' : ''}${(item as ArtistResult).city ? `${(item as ArtistResult).city}, ${(item as ArtistResult).country || ''}` : ''}` : ''}</Typography>}
+                    primary={
+                      <Typography variant="subtitle1">
+                        {typeof item === "string"
+                          ? item
+                          : item.name ||
+                            item.title ||
+                            item.artistName ||
+                            JSON.stringify(item)}
+                      </Typography>
+                    }
+                    secondary={
+                      <Typography variant="body2" color="text.secondary">
+                        {(item as ArtistResult).genre ||
+                        (item as ArtistResult).city
+                          ? `${(item as ArtistResult).genre || ""}${(item as ArtistResult).genre && (item as ArtistResult).city ? " • " : ""}${(item as ArtistResult).city ? `${(item as ArtistResult).city}, ${(item as ArtistResult).country || ""}` : ""}`
+                          : ""}
+                      </Typography>
+                    }
                   />
-                </ListItem>
+                </ListItemButton>
               ))
             ) : (
               <Typography variant="body2" color="text.secondary" sx={{ p: 2 }}>

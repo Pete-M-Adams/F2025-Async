@@ -1,6 +1,13 @@
 // ResultList.tsx
 import React from "react";
-import { Box, List, ListItem, ListItemText, CircularProgress, Typography } from "@mui/material";
+import {
+  Box,
+  List,
+  ListItemText,
+  CircularProgress,
+  Typography,
+  ListItem,
+} from "@mui/material";
 
 type Artist = {
   name: string;
@@ -9,7 +16,7 @@ type Artist = {
 };
 
 type Props = {
-  results: Artist[];  // <-- changed from string[]
+  results: Artist[]; // <-- changed from string[]
   loading?: boolean;
 };
 
@@ -24,9 +31,7 @@ export default function ResultList({ results, loading }: Props) {
 
   if (!results || results.length === 0) {
     return (
-      <Typography sx={{ mt: 2, color: "lightgray" }}>
-        No results
-      </Typography>
+      <Typography sx={{ mt: 2, color: "lightgray" }}>No results</Typography>
     );
   }
 
@@ -38,6 +43,7 @@ export default function ResultList({ results, loading }: Props) {
             primary={artist.name}
             secondary={`${artist.city}, ${artist.country}`}
           />
+          <a href="/artist"></a>
         </ListItem>
       ))}
     </List>
