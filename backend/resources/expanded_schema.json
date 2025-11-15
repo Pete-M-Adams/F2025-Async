@@ -5,12 +5,12 @@
       "country": "United States",
       "city": "Long Branch",
       "summary": "A Description of Artist",
-      "image": "https://example.com/bruce-springsteen.jpg",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/5/54/SpringsteenCardiff050524_%2845_of_166%29_%2853705384769%29_%28cropped%29.jpg",
       "albums": [
         {
           "title": "Born to Run",
           "year": 1975,
-          "image": "https://example.com/born-to-run.jpg",
+          "image": "https://upload.wikimedia.org/wikipedia/en/thumb/7/7a/Born_to_Run_%28Front_Cover%29.jpg/250px-Born_to_Run_%28Front_Cover%29.jpg",
           "rating": 5,
           "tracks": [
             {
@@ -32,12 +32,12 @@
       "country": "United States",
       "city": "Gary",
       "summary": "A Description of Artist",
-      "image": "https://example.com/michael-jackson.jpg",
+      "image": "https://www.slantmagazine.com/wp-content/uploads/2023/08/michaeljackson.jpg",
       "albums": [
         {
           "title": "Thriller",
           "year": 1982,
-          "image": "https://example.com/thriller.jpg",
+          "image": "https://upload.wikimedia.org/wikipedia/en/5/55/Michael_Jackson_-_Thriller.png",
           "rating": 5,
           "tracks": [
             {
@@ -57,12 +57,12 @@
       "country": "United States",
       "city": "Hollywood",
       "summary": "A Description of Artist",
-      "image": "https://example.com/madonna.jpg",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/7/78/MadonnaO2171023_%2897_of_133%29_%2853269593787%29_%28cropped%29.jpg",
       "albums": [
         {
           "title": "Like a Virgin",
           "year": 1984,
-          "image": "https://example.com/like-a-virgin.jpg",
+          "image": "https://www.audiophileusa.com/images/products/EDCBE73F-9754-4DFC-DC31425ECEB2BE59_x.jpg",
           "rating": 5,
           "tracks": [
             {
