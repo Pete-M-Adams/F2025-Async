@@ -9,7 +9,16 @@ This directory contains the Python backend for the Curated For You, By You appli
     pip install -r requirements.txt
     ```
 
-2.  **Run the application:**
+2.  **Configure environment variables:**
+    ```bash
+    # Copy the example environment file
+    cp .env.example .env
+    
+    # Edit .env with your actual values
+    # Required: AWS_URL, AWS_TOKEN
+    ```
+
+3.  **Run the application:**
     ```bash
     uvicorn main:app --reload
     ```
@@ -55,18 +64,55 @@ You need to have the following software installed on your machine:
     pip install -r requirements.txt
     ```
 
+3.  **Configure environment variables:**
+    ```sh
+    # Copy the example environment file
+    cp .env.example .env
+    
+    # Edit .env with your actual values
+    # Required: AWS_URL, AWS_TOKEN
+    ```
+
+### Environment Variables
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `AWS_URL` | Yes | - | Base URL for the cloud service API |
+| `AWS_TOKEN` | Yes | - | API authentication token |
+| `HTTP_TIMEOUT` | No | 30 | Request timeout in seconds |
+| `HTTP_MAX_RETRIES` | No | 3 | Maximum retry attempts |
+
+For local development, create a `.env` file from `.env.example`.
+
+For AWS App Runner deployment, configure these in the App Runner Console under Configuration → Environment Variables.
+
 ### Running the Application
 
-Once the dependencies are installed, you can run the application using `uvicorn`:
+Once the dependencies are installed and environment variables are configured, you can run the application using `uvicorn`:
 ```sh
 uvicorn main:app --host 127.0.0.1 --port 8000 --reload
 ```
 The API will be available at `http://127.0.0.1:8000`. The `--reload` flag enables hot-reloading, so the server will restart automatically after code changes.
 
+## Environment Variables
+
+### Required
+- `AWS_URL` - Base URL for the cloud service API
+- `AWS_TOKEN` - API authentication token
+
+### Optional
+- `HTTP_TIMEOUT` - Request timeout in seconds (default: 30)
+- `HTTP_MAX_RETRIES` - Maximum retry attempts (default: 3)
+
+For local development, create a `.env` file from `.env.example`.
+
+For AWS App Runner deployment, configure these in the App Runner Console under Configuration → Environment Variables.
+
 ## API Endpoints
 
 The API provides several endpoints to access music data.
 
+### Local Data Endpoints
 - `GET /`: Provides basic information about the API and a list of available endpoints.
 - `GET /artists`: Returns a list of artists. Can be filtered by `genre`, `country`, and `city` query parameters.
 - `GET /artists/{name}`: Returns all available information for a specific artist by name.
@@ -74,6 +120,9 @@ The API provides several endpoints to access music data.
 - `GET /artists/{name}/image`: Returns the image URL for a specific artist.
 - `GET /artists/{name}/albums`: Returns a list of albums by a specific artist.
 - `GET /albums/{title}/description`: Returns all available information for a specific album by title.
+
+### Cloud Service Integration Endpoints
+- `GET /cloud/artists`: Fetches artist data from the cloud service. Supports `genre`, `country`, and `city` query parameters.
 
 ### Interactive API Documentation
 
