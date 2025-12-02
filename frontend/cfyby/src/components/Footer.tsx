@@ -25,7 +25,10 @@ export default function Footer() {
         container
         alignItems="center"
         justifyContent="space-between"
-        sx={{ flexWrap: "nowrap" }}
+        sx={{ 
+          flexDirection: { xs: "column", sm: "row" },
+          textAlign: { xs: "center", sm: "left" },
+          flexWrap: "wrap" }}
       > 
         {/* Left side footer content*/}
         <Grid2>

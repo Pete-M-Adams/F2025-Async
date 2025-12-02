@@ -142,7 +142,7 @@ export default function LocationSearch() {
       {showResults && (
         <Box
           sx={{
-            width: 400,
+            width: 300,
             height: 600,
             borderRadius: 3,
             bgcolor: "white",

@@ -4,6 +4,7 @@
   },
   "dependencies": {
     "@fontsource/urbanist": "^5.2.7",
-    "fontsource": "^0.0.1-security"
+    "fontsource": "^0.0.1-security",
+    "vite": "^7.2.6"
   }
 }
