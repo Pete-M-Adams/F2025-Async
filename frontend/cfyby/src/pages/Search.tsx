@@ -94,10 +94,9 @@ export default function Search() {
             "& .MuiSvgIcon-root": { color: "black" },
 
             "& .MuiAutocomplete-popper": {
-              maxWidth: "95vw !important",
-              left: "50% !important",
-              transform: "translateX(-50%) !important",
-              zIndex: 9999,
+              left: "0 !important",
+              transform: "none !important",
+              width: "100% !important",
             },
 
             "& .MuiAutocomplete-popper .MuiPaper-root": {
