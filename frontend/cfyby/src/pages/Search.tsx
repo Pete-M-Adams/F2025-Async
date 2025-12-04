@@ -75,7 +75,7 @@ export default function Search() {
 
             "& .MuiSelect-icon, & .MuiAutocomplete-endAdornment": {
               right: "12px",
-              transform: "scale(1.15)",
+              transform: "scale(1.15) translateY(-9px)",
             },
 
             "& .MuiOutlinedInput-root": {
