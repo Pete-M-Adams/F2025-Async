@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Stack } from "@mui/material";
 import SearchForm from "./SearchForm";
 import ResultsList from "./ResultList";
 import type { ArtistResult } from "./types";
-import useGeolocation from "../../hooks/useGeolocation";
 
 export default function LocationSearch() {
   const [loading, setLoading] = useState(false);
@@ -29,6 +28,8 @@ export default function LocationSearch() {
       const payload = Array.isArray(data)
         ? data
         : data.results || data.artists || [];
+
+      console.log(payload)
 
       setResults(payload);
       setShowResults(true);

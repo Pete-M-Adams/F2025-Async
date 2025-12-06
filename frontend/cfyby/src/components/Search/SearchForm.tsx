@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Box,
   Button,
@@ -9,6 +9,8 @@ import {
   FormControlLabel,
   Select,
   MenuItem,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import useGeolocation from "../../hooks/useGeolocation";
 
@@ -26,17 +28,43 @@ export default function SearchForm({ onSearch, loading }: Props) {
 
   const [genreOptions] = useState(["Rock", "Hip Hop", "Jazz", "Pop", "Country"]);
 
+  const [radiusOptions] = useState([5, 10, 20, 50])
+
   const [values, setValues] = useState({
     genre: "",
     location: "",
+    radius: 5,
   });
 
+  const geoOptions: PositionOptions = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0,
+  }
+
+  const [useCurrentLocation, setUseCurrentLocation] = useState(false);
+
+  const { data } = useGeolocation(geoOptions);
+  console.log(data);
+
   const handleInputChange = (
-    field: "genre" | "location",
-    value: string
+    field: "genre" | "location" | "radius",
+    value: string | number
   ) => {
+    if (field === "location" && useCurrentLocation) {
+      setUseCurrentLocation(false);
+    }
     setValues((prev) => ({ ...prev, [field]: value }));
   };
+
+  const handleLocationCheckChange = () => {
+    setUseCurrentLocation(!useCurrentLocation);
+    if (data) {
+      setValues((prev) => ({ ...prev, ["location"]: prev.location !== data.location || !prev.location ? data.location ?? "" : "" }));
+    } else {
+      setValues((prev) => ({ ...prev, ["location"]: "" }));
+    }
+  }
 
   const handleClick = () => {
     onSearch(values);
@@ -68,7 +96,8 @@ export default function SearchForm({ onSearch, loading }: Props) {
   }}
 >
       <FormControlLabel
-        control={<Checkbox defaultChecked />}
+        control={<Checkbox checked={useCurrentLocation}/>}
+        onChange={handleLocationCheckChange}
         label="Use Current Location"
       />
 
@@ -96,16 +125,22 @@ export default function SearchForm({ onSearch, loading }: Props) {
         renderInput={(params) => <TextField {...params} label="Location" />}
       />
 
-      <Select
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
-        value={""}
-        label="Age"
-      >
-        <MenuItem value={10}>Ten</MenuItem>
-        <MenuItem value={20}>Twenty</MenuItem>
-        <MenuItem value={30}>Thirty</MenuItem>
-      </Select>
+      <FormControl size="small" sx={{ minWidth: 100 }}>
+        <InputLabel id="radius-select-label">Radius (km)</InputLabel>
+        <Select
+          labelId="radius-select-label"
+          id="radius-select"
+          value={values.radius || null}
+          label="Radius (km)"
+          onChange={(e) => handleInputChange("radius", Number(e.target.value))}
+        >
+          {radiusOptions.map((r) => (
+            <MenuItem key={r} value={r}>
+              {r} km
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
 
       <Autocomplete
         disablePortal = {false}
