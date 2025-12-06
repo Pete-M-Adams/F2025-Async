@@ -8,27 +8,26 @@ import {
 } from "@mui/material";
 
 type Props = {
-  onSearch: (values: { genre: string; city: string; country: string }) => void;
+  onSearch: (values: { genre: string; location: string }) => void;
   loading: boolean;
 };
 
 export default function SearchForm({ onSearch, loading }: Props) {
   const [locationOptions] = useState([
-    { city: "Gary", country: "United States" },
-    { city: "Hollywood", country: "United States" },
-    { city: "Long Branch", country: "United States" },
+    { location: "Gary, United States" },
+    { location: "Hollywood, United States" },
+    { location: "Long Branch, United States" },
   ]);
 
   const [genreOptions] = useState(["Rock", "Hip Hop", "Jazz", "Pop", "Country"]);
 
   const [values, setValues] = useState({
     genre: "",
-    country: "",
-    city: "",
+    location: "",
   });
 
   const handleInputChange = (
-    field: "genre" | "country" | "city",
+    field: "genre" | "location",
     value: string
   ) => {
     setValues((prev) => ({ ...prev, [field]: value }));
@@ -66,7 +65,7 @@ export default function SearchForm({ onSearch, loading }: Props) {
       <Autocomplete
         disablePortal = {false}
         options={locationOptions}
-        getOptionLabel={(option) => `${option.city}, ${option.country}`}
+        getOptionLabel={(option) => `${option.location}`}
         sx={{ width: 250 }}
         slotProps={{
           paper: {
@@ -77,12 +76,11 @@ export default function SearchForm({ onSearch, loading }: Props) {
           }
         }}
         value={
-          values.city ? { city: values.city, country: values.country } : null
+          values.location ? { location: values.location} : null
         }
         onChange={(_, newValue) => {
           if (newValue) {
-            handleInputChange("city", newValue.city || "");
-            handleInputChange("country", newValue.country || "");
+            handleInputChange("location", newValue.location || "");
           }
         }}
         renderInput={(params) => <TextField {...params} label="Location" />}

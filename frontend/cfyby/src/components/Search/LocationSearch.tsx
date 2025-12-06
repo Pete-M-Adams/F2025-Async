@@ -11,15 +11,13 @@ export default function LocationSearch() {
 
   const handleSearch = async (values: {
     genre: string;
-    city: string;
-    country: string;
+    location: string;
   }) => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
       if (values.genre.trim()) params.append("genre", values.genre);
-      if (values.city.trim()) params.append("city", values.city);
-      if (values.country.trim()) params.append("country", values.country);
+      if (values.location.trim()) params.append("location", values.location);
       params.append("n", "50");
 
       const request_url = `/artists?${params.toString()}`;

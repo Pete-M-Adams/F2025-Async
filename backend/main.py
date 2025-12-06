@@ -1,6 +1,7 @@
 # main.py
 import json
 import logging
+
 import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -8,11 +9,11 @@ from fastapi.responses import JSONResponse
 
 # Import cloud service client
 from services.cloud_service_client import (
-    CloudServiceClient,
-    CloudServiceError,
     CloudServiceAuthenticationError,
+    CloudServiceClient,
+    CloudServiceConnectionError,
+    CloudServiceError,
     CloudServiceTimeoutError,
-    CloudServiceConnectionError
 )
 
 # Configure logging
@@ -20,7 +21,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # TODO make something cleaner for Sprint 2
-file = open("resources/expanded_schema.json", "r")
+file = open("resources/audioDB_200_in_order.json", "r")
 global_music_data = json.load(file)
 
 # Create the FastAPI app instance
@@ -59,10 +60,11 @@ async def ip_whitelist_middleware(request: Request, call_next):
     #check if ip is in ALLOWED_IPS
     if client_ip not in ALLOWED_IPS:
         raise HTTPException(status_code=403, detail=f"IP {client_ip} has not been whitelisted")
-    
+
     #if ip is whitelisted, the request will continue
     return await call_next(request)
     return response """
+
 
 @app.get("/artists/genre")
 def get_artists_by_genre(genre: str, n: int):
@@ -95,7 +97,7 @@ def get_artists_by_genre(genre: str, n: int):
     return {"results": output_list}
 
 
-@app.get("/artists/city")
+@app.get("/artists/location")
 def get_artists_by_genre_city(genre: str, city: str, n: int):
     """
     Returns an array of N artists based on a genre and city
@@ -104,8 +106,8 @@ def get_artists_by_genre_city(genre: str, city: str, n: int):
     ----------
     genre : str
         An allowed genre that's searchable.
-    city : str
-        An allowed city
+    location : str
+        An location city
     n : int
         The second of artists to return if possible.
     Returns
@@ -116,10 +118,10 @@ def get_artists_by_genre_city(genre: str, city: str, n: int):
         an array of zero artists
     """
     search_genre = genre.lower()
-    search_city = city.lower()
+    search_city = location.lower()
 
     artists_of_genre = global_music_data[search_genre]
-    artists_of_city = []
+    artists_of_city = []:%! jq .
 
     for i in range(len(artists_of_genre)):
         if artists_of_genre[i]["city"].lower() == search_city:
@@ -219,8 +221,7 @@ Get all available information for an artist
     artist information
         {
             "name": "Bruce Springsteen",
-            "country": "United States",
-            "city": "Long Branch",
+            "location": "United States Long Branch",
             "summary": "A Description of Artist",
             "image": "https://example.com/bruce-springsteen.jpg",
             "albums": [
@@ -391,79 +392,75 @@ def get_album_description(title: str):
 async def get_cloud_artists(genre: str = None, country: str = None, city: str = None):
     """
     Example endpoint that fetches artist data from the cloud service.
-    
+
     This demonstrates integration with the external cloud service API.
-    
+
     Query Parameters:
         genre: Filter by genre (optional)
         country: Filter by country (optional)
         city: Filter by city (optional)
-    
+
     Returns:
         JSON response with cloud service data
     """
     try:
         # Create cloud service client
         client = CloudServiceClient()
-        
+
         # Build query parameters
         params = {}
         if genre:
-            params['genre'] = genre
+            params["genre"] = genre
         if country:
-            params['country'] = country
+            params["country"] = country
         if city:
-            params['city'] = city
-        
+            params["city"] = city
+
         # Make request to cloud service
         logger.info(f"Fetching artists from cloud service with params: {params}")
         data = client.get("/artists", params=params)
-        
+
         return JSONResponse(
             status_code=200,
             content={
                 "status": "success",
                 "source": "cloud_service",
                 "data": data,
-                "message": "Successfully retrieved data from cloud service"
-            }
+                "message": "Successfully retrieved data from cloud service",
+            },
         )
-        
+
     except CloudServiceAuthenticationError as e:
         # Log error for monitoring
         logger.error(f"ERROR: Authentication failed: {str(e)}", exc_info=True)
         raise HTTPException(
             status_code=401,
-            detail="Failed to authenticate with cloud service. Check configuration."
+            detail="Failed to authenticate with cloud service. Check configuration.",
         )
-        
+
     except CloudServiceTimeoutError as e:
         logger.error(f"ERROR: Request timeout: {str(e)}", exc_info=True)
         raise HTTPException(
             status_code=504,
-            detail="Cloud service request timed out. Please try again later."
+            detail="Cloud service request timed out. Please try again later.",
         )
-        
+
     except CloudServiceConnectionError as e:
         logger.error(f"ERROR: Connection failed: {str(e)}", exc_info=True)
         raise HTTPException(
             status_code=503,
-            detail="Unable to connect to cloud service. Please try again later."
+            detail="Unable to connect to cloud service. Please try again later.",
         )
-        
+
     except CloudServiceError as e:
         logger.error(f"ERROR: Cloud service error: {str(e)}", exc_info=True)
         raise HTTPException(
-            status_code=502,
-            detail=f"Error communicating with cloud service: {str(e)}"
+            status_code=502, detail=f"Error communicating with cloud service: {str(e)}"
         )
-        
+
     except Exception as e:
         logger.error(f"ERROR: Unexpected error: {str(e)}", exc_info=True)
-        raise HTTPException(
-            status_code=500,
-            detail="Internal server error"
-        )
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 
 if __name__ == "__main__":
