@@ -29,11 +29,8 @@ export default function PopularTracks({ albums, loading }: PopularTracksProps) {
 
   return (
     <Box sx={{ mb: 4 }}>
-      <Typography
-        variant="h6"
-        sx={{ color: "white", fontWeight: 600, mb: 2 }}
-      >
-        Popular
+      <Typography variant="h6" sx={{ color: "white", fontWeight: 600, mb: 2 }}>
+        Recent Album
       </Typography>
 
       <Box
