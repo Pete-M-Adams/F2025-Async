@@ -1,11 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Button,
   CircularProgress,
   TextField,
   Autocomplete,
+  Checkbox,
+  FormControlLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
+import useGeolocation from "../../hooks/useGeolocation";
 
 type Props = {
   onSearch: (values: { genre: string; location: string }) => void;
@@ -40,28 +45,33 @@ export default function SearchForm({ onSearch, loading }: Props) {
   const isDisabled = loading || !values.genre;
 
   return (
-    <Box
-      sx={{
-        bgcolor: "white",
-        boxShadow: 4,
-        borderRadius: 3,
-        p: 4,
-        display: "flex",
-        flexDirection: { xs: "column", md: "row" },
-        alignItems: { xs: "stretch", md: "center" },
-        gap: 2,
-        minWidth: { xs: "90vw", md: "800px" },
-        maxWidth: { xs: "90vw", md: "800px" },
-        "& .MuiOutlinedInput-root": {
-          backgroundColor: "rgba(255,255,255,0.9)",
-          borderRadius: "10px",
-          "& fieldset": { borderColor: "black" },
-          "&:hover fieldset": { borderColor: "black" },
-          "&.Mui-focused fieldset": { borderColor: "black" },
-        
-        },
-      }}
-    >
+<Box
+  sx={{
+    bgcolor: "white",
+    boxShadow: 4,
+    borderRadius: 3,
+    p: 4,
+    display: "flex",
+    flexDirection: { xs: "column", md: "row" },
+    alignItems: { xs: "center", md: "center" },
+    justifyContent: { xs: "center", md: "center" },
+    gap: 2,
+    minWidth: { xs: "90vw", md: "1200px" },
+    maxWidth: { xs: "90vw", md: "1200px" },
+    "& .MuiOutlinedInput-root": {
+      backgroundColor: "rgba(255,255,255,0.9)",
+      borderRadius: "10px",
+      "& fieldset": { borderColor: "black" },
+      "&:hover fieldset": { borderColor: "black" },
+      "&.Mui-focused fieldset": { borderColor: "black" },
+    },
+  }}
+>
+      <FormControlLabel
+        control={<Checkbox defaultChecked />}
+        label="Use Current Location"
+      />
+
       <Autocomplete
         disablePortal = {false}
         options={locationOptions}
@@ -85,6 +95,17 @@ export default function SearchForm({ onSearch, loading }: Props) {
         }}
         renderInput={(params) => <TextField {...params} label="Location" />}
       />
+
+      <Select
+        labelId="demo-simple-select-label"
+        id="demo-simple-select"
+        value={""}
+        label="Age"
+      >
+        <MenuItem value={10}>Ten</MenuItem>
+        <MenuItem value={20}>Twenty</MenuItem>
+        <MenuItem value={30}>Thirty</MenuItem>
+      </Select>
 
       <Autocomplete
         disablePortal = {false}

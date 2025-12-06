@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Stack } from "@mui/material";
 import SearchForm from "./SearchForm";
 import ResultsList from "./ResultList";
 import type { ArtistResult } from "./types";
+import useGeolocation from "../../hooks/useGeolocation";
 
 export default function LocationSearch() {
   const [loading, setLoading] = useState(false);
@@ -47,7 +48,7 @@ export default function LocationSearch() {
       spacing={4}
       sx={{ justifyContent: "center", p: 4, width: "100%" }}
     >
-      <SearchForm onSearch={handleSearch} loading={loading} />
+      <SearchForm onSearch={handleSearch} loading={loading}/>
       <ResultsList results={results} show={showResults} />
     </Stack>
   );
