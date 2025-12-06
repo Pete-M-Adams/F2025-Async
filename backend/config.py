@@ -13,7 +13,7 @@ class Config:
     """Application configuration loaded from environment variables."""
     
     # Cloud service configuration
-    AWS_URL = os.getenv('AWS_URL', '').rstrip('/')  # Remove trailing slash
+    AWS_URL = os.getenv('AWS_URL', '')
     AWS_TOKEN = os.getenv('AWS_TOKEN', '')
     
     # HTTP client configuration
@@ -38,4 +38,7 @@ class Config:
 
 # Global configuration instance
 config = Config()
+
+
+
 
