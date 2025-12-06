@@ -21,7 +21,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # TODO make something cleaner for Sprint 2
-file = open("resources/audioDB_200_in_order.json", "r")
+file = open("resources/audioDB_200_in_order.json", "r", encoding="utf-8")
 global_music_data = json.load(file)
 
 # Create the FastAPI app instance
@@ -121,7 +121,7 @@ def get_artists_by_genre_city(genre: str, city: str, n: int):
     search_city = location.lower()
 
     artists_of_genre = global_music_data[search_genre]
-    artists_of_city = []:%! jq .
+    artists_of_city = []
 
     for i in range(len(artists_of_genre)):
         if artists_of_genre[i]["city"].lower() == search_city:
@@ -161,10 +161,8 @@ Get a list of artists by location and genre
     ----------
     genre : str
         An allowed genre that's searchable.
-    country : str
-        The country an artist is potentially from
-    city : str
-        The city an artist is potentially from
+    location : str
+        The country and city an artist is potentially from
     Returns
     -------
     list
@@ -201,9 +199,7 @@ def get_artists(genre: str = None, country: str = None, city: str = None):
 
     filtered_output = []
     for artist in artists_to_search:
-        if country and artist["country"].lower() != country.lower():
-            continue
-        if city and artist["city"].lower() != city.lower():
+        if country and artist["location"].lower() != location.lower():
             continue
         filtered_output.append(artist)
 
