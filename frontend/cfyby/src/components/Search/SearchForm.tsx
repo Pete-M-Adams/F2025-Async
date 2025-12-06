@@ -14,9 +14,9 @@ type Props = {
 
 export default function SearchForm({ onSearch, loading }: Props) {
   const [locationOptions] = useState([
-    { location: "Gary, United States" },
-    { location: "Hollywood, United States" },
-    { location: "Long Branch, United States" },
+    { location: "Seattle, USA" },
+    { location: "Hollywood, USA" },
+    { location: "Long Branch, USA" },
   ]);
 
   const [genreOptions] = useState(["Rock", "Hip Hop", "Jazz", "Pop", "Country"]);
@@ -58,7 +58,7 @@ export default function SearchForm({ onSearch, loading }: Props) {
           "& fieldset": { borderColor: "black" },
           "&:hover fieldset": { borderColor: "black" },
           "&.Mui-focused fieldset": { borderColor: "black" },
-        
+
         },
       }}
     >

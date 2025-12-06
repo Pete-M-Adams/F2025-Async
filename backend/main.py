@@ -21,7 +21,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # TODO make something cleaner for Sprint 2
-file = open("resources/audioDB_200_in_order.json", "r")
+file = open("resources/audioDB_200_in_order.json", "r", encoding="utf-8")
 global_music_data = json.load(file)
 
 # Create the FastAPI app instance
