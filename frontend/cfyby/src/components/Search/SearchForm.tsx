@@ -59,14 +59,23 @@ export default function SearchForm({ onSearch, loading }: Props) {
           "& fieldset": { borderColor: "black" },
           "&:hover fieldset": { borderColor: "black" },
           "&.Mui-focused fieldset": { borderColor: "black" },
+        
         },
       }}
     >
       <Autocomplete
-        disablePortal
+        disablePortal = {false}
         options={locationOptions}
         getOptionLabel={(option) => `${option.city}, ${option.country}`}
         sx={{ width: 250 }}
+        slotProps={{
+          paper: {
+            sx: {
+              bgcolor: "white",
+              color: "black",
+            }
+          }
+        }}
         value={
           values.city ? { city: values.city, country: values.country } : null
         }
@@ -80,9 +89,17 @@ export default function SearchForm({ onSearch, loading }: Props) {
       />
 
       <Autocomplete
-        disablePortal
+        disablePortal = {false}
         options={genreOptions}
         sx={{ width: 250 }}
+        slotProps={{
+          paper: {
+            sx: {
+              bgcolor: "white",
+              color: "black",
+            }
+          }
+        }}
         value={values.genre || null}
         onChange={(_, newValue) => handleInputChange("genre", newValue || "")}
         renderInput={(params) => <TextField {...params} label="Genre" />}
@@ -99,7 +116,7 @@ export default function SearchForm({ onSearch, loading }: Props) {
           borderRadius: "20px",
           fontWeight: 600,
           px: 3,
-          "&:hover": { bgcolor: "#19a84d" },
+          "&:hover": { bgcolor: "#1d88b9ff" },
         }}
       >
         {loading ? "Searching..." : "Search"}
