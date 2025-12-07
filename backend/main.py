@@ -1,6 +1,7 @@
 # main.py
 import json
 import logging
+import os
 
 import uvicorn
 from fastapi import FastAPI, HTTPException
@@ -21,8 +22,14 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # TODO make something cleaner for Sprint 2
-file = open("resources/audioDB_200_in_order.json", "r", encoding="utf-8")
-global_music_data = json.load(file)
+file_path = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)),
+    "resources",
+    "audioDB_200_in_order.json",
+)
+with open(file_path, "r", encoding="utf-8") as file:
+    global_music_data = json.load(file)
+
 
 # Create the FastAPI app instance
 app = FastAPI(
@@ -183,27 +190,32 @@ Get a list of artists by location and genre
 
 
 @app.get("/artists")
-def get_artists(genre: str = None, country: str = None, city: str = None):
-    # if we don't have a valid genre, we want to at least filter for artists by city and country alone, so lets just make a
-    # huge list with every artist combined
-    artists_to_search = []
-    if genre is None:
-        for artists in global_music_data.values():
-            artists_to_search.extend(artists)
+def get_artists(location: str = None, genre: str = None):
+    all_artists = []
+    for artists in global_music_data.values():
+        all_artists.extend(artists)
 
-    else:
-        key = genre.lower()
-        if key not in global_music_data:
-            raise HTTPException(status_code=404, detail=f"Genre '{genre}' not found.")
-        artists_to_search = global_music_data[key]
+    if location is None:
+        return {"results": all_artists}
 
-    filtered_output = []
-    for artist in artists_to_search:
-        if country and artist["location"].lower() != location.lower():
-            continue
-        filtered_output.append(artist)
+    location_lower = location.lower()
+    artists_to_search = [
+        artist
+        for artist in all_artists
+        if location_lower == artist.get("location", "").lower()
+    ]
 
-    return {"results": filtered_output}
+    if genre:
+        artists_to_search = [
+            artist
+            for artist in artists_to_search
+            if genre.lower() in artist.get("genres", [])
+        ]
+
+    if not artists_to_search:
+        raise HTTPException(status_code=404, detail=f"Location '{location}' not found.")
+
+    return {"results": artists_to_search}
 
 
 """
