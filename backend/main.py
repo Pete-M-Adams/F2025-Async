@@ -1,6 +1,7 @@
 # main.py
 import json
 import logging
+import os
 
 import uvicorn
 from fastapi import FastAPI, HTTPException
@@ -21,8 +22,14 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # TODO make something cleaner for Sprint 2
-file = open("resources/audioDB_200_in_order.json", "r", encoding="utf-8")
-global_music_data = json.load(file)
+file_path = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)),
+    "resources",
+    "audioDB_200_in_order.json",
+)
+with open(file_path, "r", encoding="utf-8") as file:
+    global_music_data = json.load(file)
+
 
 # Create the FastAPI app instance
 app = FastAPI(
@@ -183,25 +190,35 @@ Get a list of artists by location and genre
 
 
 @app.get("/artists")
-def get_artists(genre: str = None, country: str = None, city: str = None):
-    # if we don't have a valid genre, we want to at least filter for artists by city and country alone, so lets just make a
-    # huge list with every artist combined
+def get_artists(genre: str = None, country: str = None, city: str = None, location: str = None):
     artists_to_search = []
-    if genre is None:
-        for artists in global_music_data.values():
-            artists_to_search.extend(artists)
-
-    else:
+    if genre:
         key = genre.lower()
         if key not in global_music_data:
             raise HTTPException(status_code=404, detail=f"Genre '{genre}' not found.")
         artists_to_search = global_music_data[key]
+    else:
+        for artists in global_music_data.values():
+            artists_to_search.extend(artists)
 
-    filtered_output = []
-    for artist in artists_to_search:
-        if country and artist["location"].lower() != location.lower():
-            continue
-        filtered_output.append(artist)
+    filtered_output = artists_to_search
+    if country:
+        filtered_output = [
+            artist for artist in filtered_output if artist.get("country", "").lower() == country.lower()
+        ]
+
+    if city:
+        filtered_output = [
+            artist for artist in filtered_output if artist.get("city", "").lower() == city.lower()
+        ]
+
+    if location:
+        location_lower = location.lower()
+        filtered_output = [
+            artist for artist in filtered_output if artist.get("location", "").lower() == location_lower
+        ]
+        if not filtered_output and location is not None:
+            raise HTTPException(status_code=404, detail=f"Location '{location}' not found.")
 
     return {"results": filtered_output}
 

@@ -12,6 +12,8 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material";
+import { GENRE_LIST } from "../../utils/genreList";
+import { LOCATION_LIST } from "../../utils/locationList";
 import useGeolocation from "../../hooks/useGeolocation";
 
 type Props = {
@@ -20,13 +22,9 @@ type Props = {
 };
 
 export default function SearchForm({ onSearch, loading }: Props) {
-  const [locationOptions] = useState([
-    { location: "Seattle, USA" },
-    { location: "Hollywood, USA" },
-    { location: "Long Branch, USA" },
-  ]);
+  const [locationOptions] = useState(LOCATION_LIST);
 
-  const [genreOptions] = useState(["Rock", "Hip Hop", "Jazz", "Pop", "Country"]);
+  const [genreOptions] = useState(GENRE_LIST);
 
   const [radiusOptions] = useState([5, 10, 20, 50])
 
@@ -102,7 +100,7 @@ export default function SearchForm({ onSearch, loading }: Props) {
       />
 
       <Autocomplete
-        disablePortal = {false}
+        disablePortal={false}
         options={locationOptions}
         getOptionLabel={(option) => `${option.location}`}
         sx={{ width: 250 }}
@@ -111,12 +109,10 @@ export default function SearchForm({ onSearch, loading }: Props) {
             sx: {
               bgcolor: "white",
               color: "black",
-            }
-          }
+            },
+          },
         }}
-        value={
-          values.location ? { location: values.location} : null
-        }
+        value={values.location ? { location: values.location } : null}
         onChange={(_, newValue) => {
           if (newValue) {
             handleInputChange("location", newValue.location || "");
@@ -143,7 +139,7 @@ export default function SearchForm({ onSearch, loading }: Props) {
       </FormControl>
 
       <Autocomplete
-        disablePortal = {false}
+        disablePortal={false}
         options={genreOptions}
         sx={{ width: 250 }}
         slotProps={{
@@ -151,8 +147,8 @@ export default function SearchForm({ onSearch, loading }: Props) {
             sx: {
               bgcolor: "white",
               color: "black",
-            }
-          }
+            },
+          },
         }}
         value={values.genre || null}
         onChange={(_, newValue) => handleInputChange("genre", newValue || "")}
@@ -164,7 +160,9 @@ export default function SearchForm({ onSearch, loading }: Props) {
         size="large"
         onClick={handleClick}
         disabled={isDisabled}
-        endIcon={loading ? <CircularProgress size={18} color="inherit" /> : null}
+        endIcon={
+          loading ? <CircularProgress size={18} color="inherit" /> : null
+        }
         sx={{
           bgcolor: "#1d88b9ff",
           borderRadius: "20px",

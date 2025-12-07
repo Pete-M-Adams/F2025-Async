@@ -3,8 +3,7 @@ import { Box, Typography, Stack } from "@mui/material";
 type ArtistAboutProps = {
   artist: {
     summary: string;
-    country: string;
-    city: string;
+    location: string;
   };
 };
 
@@ -17,10 +16,7 @@ export default function ArtistAbout({ artist }: ArtistAboutProps) {
         p: 2,
       }}
     >
-      <Typography
-        variant="h6"
-        sx={{ color: "white", fontWeight: 600, mb: 2 }}
-      >
+      <Typography variant="h6" sx={{ color: "white", fontWeight: 600, mb: 2 }}>
         About
       </Typography>
 
@@ -78,7 +74,7 @@ export default function ArtistAbout({ artist }: ArtistAboutProps) {
               fontSize: "0.95rem",
             }}
           >
-            {`${artist.city}, ${artist.country}`}
+            {`${artist.location}`}
           </Typography>
         </Box>
       </Stack>
