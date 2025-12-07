@@ -29,6 +29,8 @@ export default function LocationSearch() {
         ? data
         : data.results || data.artists || [];
 
+      console.log(payload)
+
       setResults(payload);
       setShowResults(true);
     } catch (err) {
@@ -47,7 +49,7 @@ export default function LocationSearch() {
       spacing={4}
       sx={{ justifyContent: "center", p: 4, width: "100%" }}
     >
-      <SearchForm onSearch={handleSearch} loading={loading} />
+      <SearchForm onSearch={handleSearch} loading={loading}/>
       <ResultsList results={results} show={showResults} />
     </Stack>
   );
