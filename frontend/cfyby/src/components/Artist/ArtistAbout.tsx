@@ -27,10 +27,7 @@ export default function ArtistAbout({ artist }: ArtistAboutProps) {
         p: 2,
       }}
     >
-      <Typography
-        variant="h6"
-        sx={{ color: "white", fontWeight: 600, mb: 2 }}
-      >
+      <Typography variant="h6" sx={{ color: "white", fontWeight: 600, mb: 2 }}>
         About
       </Typography>
 
