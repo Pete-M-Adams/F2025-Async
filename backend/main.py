@@ -190,32 +190,37 @@ Get a list of artists by location and genre
 
 
 @app.get("/artists")
-def get_artists(location: str = None, genre: str = None):
-    all_artists = []
-    for artists in global_music_data.values():
-        all_artists.extend(artists)
-
-    if location is None:
-        return {"results": all_artists}
-
-    location_lower = location.lower()
-    artists_to_search = [
-        artist
-        for artist in all_artists
-        if location_lower == artist.get("location", "").lower()
-    ]
-
+def get_artists(genre: str = None, country: str = None, city: str = None, location: str = None):
+    artists_to_search = []
     if genre:
-        artists_to_search = [
-            artist
-            for artist in artists_to_search
-            if genre.lower() in artist.get("genres", [])
+        key = genre.lower()
+        if key not in global_music_data:
+            raise HTTPException(status_code=404, detail=f"Genre '{genre}' not found.")
+        artists_to_search = global_music_data[key]
+    else:
+        for artists in global_music_data.values():
+            artists_to_search.extend(artists)
+
+    filtered_output = artists_to_search
+    if country:
+        filtered_output = [
+            artist for artist in filtered_output if artist.get("country", "").lower() == country.lower()
         ]
 
-    if not artists_to_search:
-        raise HTTPException(status_code=404, detail=f"Location '{location}' not found.")
+    if city:
+        filtered_output = [
+            artist for artist in filtered_output if artist.get("city", "").lower() == city.lower()
+        ]
 
-    return {"results": artists_to_search}
+    if location:
+        location_lower = location.lower()
+        filtered_output = [
+            artist for artist in filtered_output if artist.get("location", "").lower() == location_lower
+        ]
+        if not filtered_output and location is not None:
+            raise HTTPException(status_code=404, detail=f"Location '{location}' not found.")
+
+    return {"results": filtered_output}
 
 
 """
