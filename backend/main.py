@@ -41,6 +41,8 @@ app = FastAPI(
 origins = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
 ]
 
 """ #ip whitelist
@@ -187,6 +189,10 @@ Get a list of artists by location and genre
 # Backend (Stores Data) (DATA) Models | Brain is here with Pete
 #   ^
 # ###
+
+@app.get("/local/audio")
+def get_audio_db():
+    return global_music_data
 
 
 @app.get("/artists")
