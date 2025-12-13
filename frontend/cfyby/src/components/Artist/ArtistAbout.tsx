@@ -4,9 +4,9 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
 type ArtistAboutProps = {
-  artist: {
-    summary: string;
-    location: string;
+  artist?: {
+    summary?: string;
+    location?: string;
   };
 };
 
@@ -45,7 +45,7 @@ export default function ArtistAbout({ artist }: ArtistAboutProps) {
               pb: isSummaryExpanded ? 0 : '10px',
             }}
           >
-            {artist.summary}
+            {artist?.summary || 'No summary available for this artist.'}
           </Typography>
         </Collapse>
 
@@ -63,7 +63,7 @@ export default function ArtistAbout({ artist }: ArtistAboutProps) {
           />
         )}
 
-        {artist.summary.length > 100 && (
+        {artist?.summary && artist.summary.length > 100 && (
           <Stack
             direction="row"
             alignItems="center"
@@ -116,7 +116,7 @@ export default function ArtistAbout({ artist }: ArtistAboutProps) {
               fontSize: "0.95rem",
             }}
           >
-            {`${artist.location}`}
+            {`${artist?.location || 'Unknown'}`}
           </Typography>
         </Box>
       </Stack>
