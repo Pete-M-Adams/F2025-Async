@@ -84,6 +84,7 @@ If you encounter any issues, here are a few things to check:
         ```
 *   **"Port is already allocated" error**: This means another service is using port 8080 or 8000. You can stop the conflicting service or change the port mapping in the `docker run` command. For example, to use port 8081 for the frontend: `docker run -d -p 8081:80 ...`
 *   **"Unable to find image" or "pull access denied" error**: This error means Docker cannot find the specified image locally. Make sure you have successfully built the Docker image for the service you are trying to run. For example, before running `cfyby-frontend`, you must first build it with `docker build -t cfyby-frontend .` inside the `frontend/cfyby` directory.
+*   **Running without Docker**: The application is configured to work both in Docker and when run locally. If you run the backend with `uvicorn` and the frontend with `npm run dev`, the frontend will still correctly connect to the backend at `http://localhost:8000`.
 *   **No Search Results**: This is likely not a setup issue. Try broadening your search criteria.
 *   **API Errors**: If the frontend is running but you see API errors, check the logs of the backend container (`docker logs cfyby-api`) to see if it's running correctly.
 
