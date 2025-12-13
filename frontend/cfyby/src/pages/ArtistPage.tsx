@@ -19,7 +19,7 @@ export default function ArtistPage() {
       setLoading(true);
 
       try {
-        const response = await fetch(`/artists/${id}`);
+        const response = await fetch(`http://localhost:8000/artists/${id}`);
         const data = await response.json();
 
         const payload = data.artist || data.result || data;
