@@ -1,10 +1,18 @@
 import pytest
 from fastapi.testclient import TestClient
+import os
+import json
 
 # Assuming pytest is run from the project root, which is the parent of 'backend'
 from backend.main import app
 
 client = TestClient(app)
+
+file_path = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)),
+    "resources",
+    "audioDB_200_in_order.json",
+)
 
 
 def test_get_root():
@@ -194,3 +202,66 @@ def test_get_album_description_not_found():
     assert response.json() == {
         "detail": "No album title found with name 'NonExistent Album'!"
     }
+
+def test_register_artist_passes():
+    """Happy Path: Tests that the post end point passes without error."""
+    test_artist = {
+        "genre": "rock",
+        "name": "Test Artist",
+        "location": "Test City",
+        "summary": "Test artist summary",
+        "image": "http://example.com/image.jpg"
+    }
+    response = client.post("/artists/register", json=test_artist)
+    assert response.status_code == 200
+
+def test_register_artist_existing_genre_json_updates():
+    """Happy Path: Tests that the post end point passes without error and updates the JSON database with a new artist."""
+    test_artist = {
+        "genre": "rock",
+        "name": "Test Artist",
+        "location": "Test City",
+        "summary": "Test artist summary",
+        "image": "http://example.com/image.jpg"
+    }
+
+    response = client.post("/artists/register", json=test_artist)
+    #read in audioDB_200_in_order.json
+    with open(file_path, "r", encoding="utf-8") as file:
+        data = json.load(file)
+
+    assert response.status_code == 200
+    assert "Test Artist" in data["rock"]
+
+def test_register_artist_new_genre_json_updates():
+    """Happy Path: Tests that the post end point passes without error and updates the JSON database with a new genre and artist entry."""
+    test_artist = {
+        "genre": "Vaporwave",
+        "name": "Guy Who Does Vaporwave",
+        "location": "Miami",
+        "summary": "His summary",
+        "image": "http://example.com/image.jpg"
+    }
+
+    response = client.post("/artists/register", json=test_artist)
+    #read in audioDB_200_in_order.json
+    with open(file_path, "r", encoding="utf-8") as file:
+        data = json.load(file)
+
+    assert response.status_code == 200
+    assert "Vaporwave" in data
+    assert "Guy Who Does Vaporwave" in data["Vaporwave"]
+
+def test_register_artist_new_genre_json_updates_no_duplicate():
+    """Happy Path: Tests that the post end point passes without error and updates the JSON database with a new genre and artist entry."""
+    test_artist = {
+        "genre": "Vaporwave",
+        "name": "Guy Who Does Vaporwave",
+        "location": "Miami",
+        "summary": "His summary",
+        "image": "http://example.com/image.jpg"
+    }
+
+    response = client.post("/artists/register", json=test_artist)
+    response = client.post("/artists/register", json=test_artist)
+    assert response.status_code == 409
