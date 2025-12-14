@@ -1,7 +1,10 @@
 # main.py
+from codecs import namereplace_errors
+from gzip import READ
 import json
 import logging
 import os
+from pydantic import BaseModel
 
 import uvicorn
 from fastapi import FastAPI, HTTPException
@@ -476,6 +479,21 @@ async def get_cloud_artists(genre: str = None, country: str = None, city: str = 
     except Exception as e:
         logger.error(f"ERROR: Unexpected error: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail="Internal server error")
+
+#schema for artists to register
+class RegisteredArtist(BaseModel):
+    genre: str
+    name: str
+    location: str
+    summary: str | None = None
+    image: str | None = None
+
+@app.post("artists/register")
+async def register_artist(RegisteredArtist: RegisteredArtist):
+    """ register your own artist profile and write to our .json file"""
+    return RegisteredArtist
+
+
 
 
 if __name__ == "__main__":
