@@ -486,8 +486,8 @@ class RegisteredArtist(BaseModel):
     genre: str
     name: str
     location: str
-    summary: str | None = None
-    image: str | None = None
+    summary: str or None = None
+    image: str or None = None
 
 @app.post("artists/register")
 async def register_artist(artist: RegisteredArtist):
