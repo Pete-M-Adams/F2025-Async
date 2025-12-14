@@ -489,7 +489,7 @@ class RegisteredArtist(BaseModel):
     summary: str or None
     image: str or None
 
-@app.post("artists/register")
+@app.post("/artists/register")
 async def register_artist(artist: RegisteredArtist):
     """ register your own artist profile and write to our .json file"""
     normalized_input = {
