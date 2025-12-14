@@ -5,6 +5,7 @@ import json
 import logging
 import os
 from pydantic import BaseModel
+from pydantic import field_validator
 
 import uvicorn
 from fastapi import FastAPI, HTTPException
@@ -489,10 +490,33 @@ class RegisteredArtist(BaseModel):
     image: str | None = None
 
 @app.post("artists/register")
-async def register_artist(RegisteredArtist: RegisteredArtist):
+async def register_artist(artist: RegisteredArtist):
     """ register your own artist profile and write to our .json file"""
-    return RegisteredArtist
+    normalized_input = {
+        "name": artist.name.strip(),
+        "location": artist.location.strip(),
+        "summary": artist.summary.strip() if artist.summary else None,
+        "image": artist.image.strip() if artist.image else None
+    }
+    #read in audioDB_200_in_order.json
+    with open(file_path, "r", encoding="utf-8") as file:
+        data = json.load(file)
 
+    #normalize inputted genre to lowercase to match our keys
+    genre = artist.genre.strip().lower()
+
+    #if inputted genre is not in our file, add new genre
+    if genre not in data:
+        data[genre] = []
+
+    #append the artist to the genre
+    data[genre].append(normalized_input)
+
+    #write the data to the file
+    with open(file_path, "w", encoding="utf-8") as file:
+        json.dump(data, file, indent=2, ensure_ascii=False)
+
+    return {"message": "Artist registered successfully", "artist": normalized_input}
 
 
 
