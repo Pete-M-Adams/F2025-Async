@@ -194,6 +194,10 @@ Get a list of artists by location and genre
 #   ^
 # ###
 
+@app.get("/local/audio")
+def get_audio_db():
+    return global_music_data
+
 
 @app.get("/artists")
 def get_artists(genre: str = None, country: str = None, city: str = None, location: str = None):
