@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 file_path = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
     "resources",
-    "audioDB_200_in_order.json",
+    "audioDB_200_test.json",
 )
 with open(file_path, "r", encoding="utf-8") as file:
     global_music_data = json.load(file)
@@ -508,6 +508,12 @@ async def register_artist(artist: RegisteredArtist):
     #if inputted genre is not in our file, add new genre
     if genre not in data:
         data[genre] = []
+
+    #append the artist to the genre
+    artist_name = normalized_input["name"]
+    if any(existing_artist.get("name") == artist_name for existing_artist in data[genre]):
+        raise HTTPException(status_code=409, detail=f"Artist '{artist.name}' already exists in our data")
+
 
     #append the artist to the genre
     data[genre].append(normalized_input)

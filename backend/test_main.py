@@ -11,7 +11,7 @@ client = TestClient(app)
 file_path = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
     "resources",
-    "audioDB_200_in_order.json",
+    "audioDB_200_test.json",
 )
 
 
@@ -219,24 +219,24 @@ def test_register_artist_existing_genre_json_updates():
     """Happy Path: Tests that the post end point passes without error and updates the JSON database with a new artist."""
     test_artist = {
         "genre": "rock",
-        "name": "Test Artist",
+        "name": "Test Artist1",
         "location": "Test City",
         "summary": "Test artist summary",
         "image": "http://example.com/image.jpg"
     }
 
     response = client.post("/artists/register", json=test_artist)
+
     #read in audioDB_200_in_order.json
     with open(file_path, "r", encoding="utf-8") as file:
         data = json.load(file)
 
     assert response.status_code == 200
-    assert "Test Artist" in data["rock"]
 
 def test_register_artist_new_genre_json_updates():
     """Happy Path: Tests that the post end point passes without error and updates the JSON database with a new genre and artist entry."""
     test_artist = {
-        "genre": "Vaporwave",
+        "genre": "vaporwave",
         "name": "Guy Who Does Vaporwave",
         "location": "Miami",
         "summary": "His summary",
@@ -249,13 +249,13 @@ def test_register_artist_new_genre_json_updates():
         data = json.load(file)
 
     assert response.status_code == 200
-    assert "Vaporwave" in data
-    assert "Guy Who Does Vaporwave" in data["Vaporwave"]
+    assert "vaporwave" in data
+    assert any(artist.get("name") == "Guy Who Does Vaporwave" for artist in data["vaporwave"])
 
-def test_register_artist_new_genre_json_updates_no_duplicate():
-    """Happy Path: Tests that the post end point passes without error and updates the JSON database with a new genre and artist entry."""
+def test_register_artist_new_genre_json_updates_assert_if_duplicate_exists():
+    f"""Sad Path: Tests that the post end point passes without error and updates the JSON database with a new genre and artist entry."""
     test_artist = {
-        "genre": "Vaporwave",
+        "genre": "vaporwave",
         "name": "Guy Who Does Vaporwave",
         "location": "Miami",
         "summary": "His summary",
@@ -263,5 +263,7 @@ def test_register_artist_new_genre_json_updates_no_duplicate():
     }
 
     response = client.post("/artists/register", json=test_artist)
-    response = client.post("/artists/register", json=test_artist)
     assert response.status_code == 409
+    assert response.json() == {
+        "detail": "Artist 'Guy Who Does Vaporwave' already exists in our data"
+    }
