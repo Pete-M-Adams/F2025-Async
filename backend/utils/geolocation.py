@@ -79,11 +79,12 @@ def geocode_location(location_string: str, retries: int = 3, delay: float = 1.0)
 def haversine_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     """
 THE HAVERSINE FORMULA!!!!!!!!!!!!!!
+
+creds to @SecretNation 
     """
     import math
     
-
-    R = 6371.0
+    R = 3958.8
     
     phi1 = math.radians(lat1)
     phi2 = math.radians(lat2)
