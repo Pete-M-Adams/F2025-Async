@@ -1,8 +1,4 @@
 # main.py
-from codecs import namereplace_errors
-from gzip import READ
-from codecs import namereplace_errors
-from gzip import READ
 import json
 import logging
 import os
