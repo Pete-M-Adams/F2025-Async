@@ -46,7 +46,7 @@ const reverseGeocode = async (lat: number, lon: number) => {
     return locationData;
   } catch (err: any) {
     console.error("Reverse geocoding error:", err);
-    return { city: null, country: null };
+    return { lat, lon, city: null, country: null };
   }
 };
 
