@@ -40,11 +40,6 @@ export default function ArtistPage() {
     fetchArtist();
   }, [id]);
 
-  // Try to get a numeric artistId that we can pass to the widget
-  const artistId =
-    artist?.id ??
-    (id ? Number(id) : undefined);
-
   return (
     <Box
       sx={{
