@@ -15,7 +15,7 @@ class Config:
     """Application configuration loaded from environment variables."""
 
     # MongoDB configuration
-    MONGO_URL = os.getenv("MONGO_URL", "mongodb://localhost:27017/")
+    MONGO_URL = os.getenv("MONGO_URL", "mongodb://mongodb:27017/")
 
     # Cloud service configuration
     AWS_URL = os.getenv("AWS_URL", "")
