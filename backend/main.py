@@ -1,4 +1,8 @@
 # main.py
+from codecs import namereplace_errors
+from gzip import READ
+from codecs import namereplace_errors
+from gzip import READ
 import json
 import logging
 import os
@@ -72,7 +76,8 @@ def get_artists_by_genre(genre: str, n: int):
 
 
 @app.get("/artists/location")
-def get_artists_by_genre_city(genre: str, city: str, n: int):
+def get_artists_by_genre_location(genre: str, location: str, n: int):
+def get_artists_by_genre_location(genre: str, location: str, n: int):
     """
     Returns an array of N artists based on a genre and city
     """
